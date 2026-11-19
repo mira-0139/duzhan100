@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>《讀戰100》守護神圖鑑</title>
+  <style>
+    :root {
+      --bg-page: #f2f7f5;
+      --bg-card: #ffffff;
+      --primary-green: #3b8d66;
+      --primary-green-dark: #256447;
+      --primary-green-light: #e6f4ed;
+      --accent-gold: #e59838;
+      --text-main: #1e293b;
+      --text-sub: #64748b;
+      --border-soft: #d5e5de;
+      --error-red: #dc2626;
+      --shadow-card: 0 8px 24px rgba(30, 64, 50, 0.08);
+      --shadow-hover: 0 14px 30px rgba(37, 100, 71, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background-color: var(--bg-page);
+      background-image:
+        radial-gradient(circle at 12% 10%, rgba(59, 141, 102, 0.08) 0%, transparent 35%),
+        radial-gradient(circle at 88% 85%, rgba(36, 136, 181, 0.08) 0%, transparent 40%);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 20px 16px 48px;
+    }
+
+    /* ================= 登入畫面樣式 ================= */
+    .login-wrapper {
+      min-height: calc(100vh - 68px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-box {
+      background: var(--bg-card);
+      border: 2px solid var(--primary-green);
+      border-radius: 24px;
+      padding: 36px 28px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: var(--shadow-card);
+      text-align: center;
+    }
+
+    .login-badge {
+      display: inline-block;
+      background: var(--primary-green);
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 8px;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .login-title {
+      font-size: 1.85rem;
+      font-weight: 900;
+      color: var(--primary-green-dark);
+      margin-bottom: 6px;
+    }
+
+    .login-subtitle {
+      font-size: 0.92rem;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .password-input {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 1.05rem;
+      border: 2px solid var(--border-soft);
+      border-radius: 14px;
+      outline: none;
+      text-align: center;
+      letter-spacing: 2px;
+      transition: border-color 0.2s ease;
+    }
+
+    .password-input:focus {
+      border-color: var(--primary-green);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary-green);
+      color: #ffffff;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .login-btn:hover:not(:disabled) {
+      background: var(--primary-green-dark);
+    }
+
+    .login-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .login-error {
+      min-height: 22px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--error-red);
+      line-height: 1.4;
+    }
+
+    .login-hint {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px dashed #cbd5e1;
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    /* ================= 主圖鑑畫面樣式 ================= */
+    .app-container {
+      max-width: 980px;
+      margin: 0 auto;
+      display: none;
+    }
+
+    .top-header {
+      background: var(--bg-card);
+      border: 2px solid var(--primary-green);
+      border-radius: 20px;
+      padding: 18px 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-tag {
+      background: var(--primary-green);
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 8px;
+      letter-spacing: 1px;
+    }
+
+    .brand-title {
+      font-size: 1.65rem;
+      font-weight: 900;
+      color: var(--primary-green-dark);
+      letter-spacing: 1px;
+    }
+
+    .status-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .info-pill {
+      background: var(--bg-page);
+      border: 1.5px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-label {
+      font-size: 0.88rem;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+
+    .info-value {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--primary-green-dark);
+    }
+
+    .logout-btn {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      color: var(--text-sub);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 10px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .logout-btn:hover {
+      border-color: var(--error-red);
+      color: var(--error-red);
+    }
+
+    .progress-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 14px;
+    }
+
+    .segment-bar {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 3px;
+      width: 156px;
+    }
+
+    .segment {
+      height: 8px;
+      border-radius: 2px;
+      background: #dce7e2;
+      transition: background-color 0.3s ease;
+    }
+
+    .segment.filled {
+      background: var(--primary-green);
+    }
+
+    .dex-board {
+      background: var(--bg-card);
+      border: 2px solid #b8d8ca;
+      border-radius: 24px;
+      padding: 28px 24px 32px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .dex-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .dex-title {
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: var(--primary-green);
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+
+    .dex-subtitle-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--text-main);
+      font-size: 0.98rem;
+      font-weight: 700;
+    }
+
+    .sparkle {
+      color: var(--primary-green);
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .subtitle-lines {
+      border-top: 1.5px solid #cbd5e1;
+      border-bottom: 1.5px solid #cbd5e1;
+      padding: 6px 18px;
+      line-height: 1.5;
+    }
+
+    .dex-tip {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+
+    .guardian-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .guardian-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 12px;
+      border: 2px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      position: relative;
+      user-select: none;
+    }
+
+    .guardian-card.unlocked {
+      border-color: #b7dccb;
+      cursor: pointer;
+    }
+
+    .guardian-card.unlocked:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary-green);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .guardian-card.locked {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      cursor: pointer;
+    }
+
+    .card-top-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .card-no {
+      background: #f1f5f9;
+      color: #475569;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .unlocked .card-no {
+      background: var(--primary-green-light);
+      color: var(--primary-green-dark);
+    }
+
+    .card-island {
+      color: var(--text-sub);
+      font-weight: 700;
+    }
+
+    .color-block {
+      width: 100%;
+      aspect-ratio: 1 / 1.05;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .unlocked .color-block {
+      box-shadow: inset 0 -10px 20px rgba(0, 0, 0, 0.14);
+    }
+
+    .guardian-block-name {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+      line-height: 1.3;
+    }
+
+    .guardian-block-sub {
+      margin-top: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.95);
+      background: rgba(0, 0, 0, 0.22);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    .locked .color-block {
+      background: linear-gradient(145deg, #cbd5e1, #94a3b8);
+    }
+
+    .silhouette-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(71, 85, 105, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+      border: 2px dashed rgba(255, 255, 255, 0.5);
+    }
+
+    .question-mark {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(51, 65, 85, 0.45);
+    }
+
+    .unknown-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #f8fafc;
+    }
+
+    .card-bottom-bar {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.82rem;
+    }
+
+    .badge-unlocked {
+      color: var(--primary-green-dark);
+      font-weight: 800;
+    }
+
+    .badge-view {
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+
+    .badge-locked {
+      color: #94a3b8;
+      font-weight: 700;
+    }
+
+    @keyframes wobble {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-3px); }
+    }
+
+    .wobble {
+      animation: wobble 0.3s ease;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .detail-card {
+      background: #ffffff;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 410px;
+      padding: 24px;
+      border: 3px solid var(--primary-green);
+      box-shadow: 0 24px 48px rgba(15, 23, 42, 0.3);
+    }
+
+    .detail-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .detail-id-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hex-badge {
+      background: var(--primary-green);
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 0.95rem;
+      padding: 6px 11px;
+      border-radius: 10px;
+    }
+
+    .detail-name {
+      font-size: 1.55rem;
+      font-weight: 900;
+    }
+
+    .detail-count {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-sub);
+      background: #f1f5f9;
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+
+    .detail-color-art {
+      width: 100%;
+      height: 175px;
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .detail-art-title {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: 3px;
+      text-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+    }
+
+    .detail-art-island {
+      margin-top: 8px;
+      background: rgba(255, 255, 255, 0.24);
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 999px;
+    }
+
+    .detail-meta-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-page);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      font-size: 0.88rem;
+    }
+
+    .detail-theme {
+      font-weight: 800;
+    }
+
+    .detail-rarity {
+      color: #d97706;
+      font-weight: 900;
+    }
+
+    .detail-desc {
+      font-size: 0.96rem;
+      line-height: 1.7;
+      color: #334155;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+    }
+
+    .close-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      background: var(--primary-green);
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1e293b;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 200;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 680px) {
+      .guardian-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      .segment-bar {
+        width: 110px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. 登入畫面 -->
+  <div class="login-wrapper" id="loginScreen">
+    <div class="login-box">
+      <span class="login-badge">學測國文</span>
+      <h1 class="login-title">《讀戰100》</h1>
+      <p class="login-subtitle">請輸入專屬密碼登入守護神圖鑑</p>
+
+      <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
+        <input
+          type="password"
+          id="passwordInput"
+          class="password-input"
+          placeholder="請輸入密碼"
+          autocomplete="off"
+          required
+        />
+        <button type="submit" id="loginBtn" class="login-btn">登入圖鑑</button>
+        <div class="login-error" id="loginError"></div>
+      </form>
+
+      <div class="login-hint">
+        範例測試密碼：<strong>1111</strong>（第 1 組）、<strong>2222</strong>（第 2 組）、<strong>1234</strong>（王小明）
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 主圖鑑畫面（登入成功後顯示） -->
+  <div class="app-container" id="appContainer">
+    <header class="top-header">
+      <div class="brand-group">
+        <span class="brand-tag">學測國文</span>
+        <h1 class="brand-title">《讀戰100》</h1>
+      </div>
+
+      <div class="status-group">
+        <div class="info-pill">
+          <span class="info-label">會員姓名</span>
+          <span class="info-value" id="memberName">--</span>
+        </div>
+
+        <div class="info-pill">
+          <div class="progress-box">
+            <div class="progress-top">
+              <span class="info-label">蒐集進度</span>
+              <span class="info-value" id="progressCount">6／12</span>
+            </div>
+            <div class="segment-bar" id="segmentBar"></div>
+          </div>
+        </div>
+
+        <button type="button" class="logout-btn" onclick="handleLogout()">登出</button>
+      </div>
+    </header>
+
+    <main class="dex-board">
+      <div class="dex-header">
+        <h2 class="dex-title">守護神收藏卡</h2>
+        <div class="dex-subtitle-row">
+          <span class="sparkle">✦</span>
+          <div class="subtitle-lines">
+            完成 12 座島嶼的挑戰，<br />
+            集滿屬於你的守護神！
+          </div>
+          <span class="sparkle">✦</span>
+        </div>
+        <p class="dex-tip">點擊已解鎖的守護神色塊，即可查看專屬角色檔案與技能加成</p>
+      </div>
+
+      <section class="guardian-grid" id="guardianGrid"></section>
+    </main>
+  </div>
+
+  <!-- 守護神卡片詳情彈窗 -->
+  <div class="modal-overlay" id="cardModal" onclick="closeModalOnBackdrop(event)">
+    <div class="detail-card" id="detailCardBox">
+      <div class="detail-header">
+        <div class="detail-id-group">
+          <span class="hex-badge" id="modalBadge">01</span>
+          <h3 class="detail-name" id="modalName">羅敷</h3>
+        </div>
+        <span class="detail-count" id="modalIndex">01 / 12</span>
+      </div>
+
+      <div class="detail-color-art" id="modalArtBlock">
+        <span class="detail-art-title" id="modalArtName">羅敷</span>
+        <span class="detail-art-island" id="modalArtIsland">解碼島</span>
+      </div>
+
+      <div class="detail-meta-strip">
+        <span class="detail-theme" id="modalTheme">主題一｜社會情緒與學習成長</span>
+        <span class="detail-rarity" id="modalRarity">★★★★</span>
+      </div>
+
+      <p class="detail-desc" id="modalDesc"></p>
+
+      <button class="close-btn" onclick="closeModal()">收起守護神卡</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toastBox"></div>
+
+  <script>
+    // =========================================================================
+    // 【重要】請只替換下方這一行引號內的文字（貼上結尾為 /exec 的網頁應用程式網址）
+    // =========================================================================
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbx6R-aqXjV8a2BzyMq59OxluHBvD-H5voBzxSjAIgEbKTVRT6jobw3z9xQw5Z5ticUx/exec";
+
+    async function handleLogin(event) {
+      event.preventDefault();
+
+      const passwordInput = document.getElementById("passwordInput");
+      const loginBtn = document.getElementById("loginBtn");
+      const loginError = document.getElementById("loginError");
+      const password = passwordInput.value.trim();
+
+      if (!password) {
+        loginError.textContent = "請輸入密碼";
+        return;
+      }
+
+      // 檢查是否為正確的網頁應用程式網址（必須以 https://script.google.com/macros/s/ 開頭且以 /exec 結尾）
+      if (!GAS_URL.startsWith("https://script.google.com/macros/s/") || !GAS_URL.endsWith("/exec")) {
+        loginError.textContent = "網址格式不正確！請在部署時選擇「網頁應用程式」，並貼上結尾為 /exec 的網址";
+        return;
+      }
+
+      loginError.textContent = "";
+      loginBtn.disabled = true;
+      loginBtn.textContent = "驗證中...";
+
+      try {
+        const response = await fetch(GAS_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify({ password: password })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          document.getElementById("memberName").textContent = result.name;
+          document.getElementById("loginScreen").style.display = "none";
+          document.getElementById("appContainer").style.display = "block";
+          passwordInput.value = "";
+          initApp();
+        } else {
+          loginError.textContent = result.message || "密碼不正確";
+          passwordInput.select();
+        }
+      } catch (error) {
+        console.error("連線失敗：", error);
+        loginError.textContent = "連線失敗，請確認網路或 Apps Script 部署權限設為「所有人」";
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = "登入圖鑑";
+      }
+    }
+
+    function handleLogout() {
+      document.getElementById("appContainer").style.display = "none";
+      document.getElementById("loginScreen").style.display = "flex";
+      document.getElementById("loginError").textContent = "";
+      document.getElementById("passwordInput").focus();
+    }
+
+    // ================= 以下為《讀戰100》12 格守護神圖鑑資料 =================
+    const guardiansData = [
+      {
+        id: 1,
+        name: "羅敷",
+        island: "解碼島",
+        theme: "主題一｜社會情緒與學習成長",
+        color: "#3b8d66",
+        rarity: "★★★★",
+        unlocked: true,
+        description:
+          "【心靈內耗清零專家】來自漢樂府〈陌上桑〉的自信少女！面對太守的無理搭訕也能冷靜智退，自帶滿級「情緒重構防禦罩」，陪你在學測高壓下穩住心態、拒絕焦慮內耗！"
+      },
+      {
+        id: 2,
+        name: "劉姥姥",
+        island: "舌尖開箱島",
+        theme: "主題二｜飲食文化與生活觀照",
+        color: "#2488b5",
+        rarity: "★★★☆",
+        unlocked: true,
+        description:
+          "【大觀園美食觀察家】最接地氣的生活智慧王！一雙慧眼看透茄鯗背後的十幾道繁複工序，能從日常一蔬一飯吃出人情世故，幫你在長文閱讀中精準捕捉隱藏線索。"
+      },
+      {
+        id: 3,
+        name: "張李德和",
+        island: "審美覺醒島",
+        theme: "主題三｜美感素養與表演藝術",
+        color: "#df9443",
+        rarity: "★★★★",
+        unlocked: true,
+        description:
+          "【琳瑯山閣全能才女】集詩、詞、書、畫與音樂於一身的嘉義藝文領袖！把日常庭院化作美學展演舞台，賦予你從文字裡看見色彩、聽見旋律的爆款審美感知力。"
+      },
+      {
+        id: 4,
+        name: "紅拂女",
+        island: "破局決策島",
+        theme: "主題四｜危機處理與決策能力",
+        color: "#8368b0",
+        rarity: "★★★★",
+        unlocked: true,
+        description:
+          "【風塵三俠果決行動派】一眼相中李靖便連夜奔赴、當機立斷改寫命運！擁有極限情境下的精準判斷力，專門在混合題與文白對讀卡關時，助你一鍵破局！"
+      },
+      {
+        id: 5,
+        name: "虯髯客",
+        island: "解鎖未來島",
+        theme: "主題五｜職涯探索與未來工作",
+        color: "#2e7d5b",
+        rarity: "★★★★",
+        unlocked: true,
+        description:
+          "【跨海開局的創業俠客】見識天下大勢後瀟灑轉身、遠赴扶餘開創嶄新天地！點亮你的生涯藍圖與跨域格局，幫你在題海衝刺中找到最適合自己的未來賽道。"
+      },
+      {
+        id: 6,
+        name: "花木蘭",
+        island: "破框平權島",
+        theme: "主題六｜性別平權與多元價值",
+        color: "#1e6fa0",
+        rarity: "★★★☆",
+        unlocked: true,
+        description:
+          "【沙場馳騁的破框先鋒】「雄兔腳撲朔，雌兔眼迷離」，打破傳統性別框架、代父出征的傳奇英雄！幫你一鍵撕掉刻板印象標籤，在思辨題中展現多元包容的帥氣視角。"
+      },
+      { id: 7, name: "韓愈", island: "資訊解毒島", unlocked: false },
+      { id: 8, name: "魯迅", island: "血條補給島", unlocked: false },
+      { id: 9, name: "項羽", island: "時光記憶島", unlocked: false },
+      { id: 10, name: "賴和", island: "賽局思辨島", unlocked: false },
+      { id: 11, name: "廖鴻基", island: "永續綠洲島", unlocked: false },
+      { id: 12, name: "范仲淹", island: "萬國航線島", unlocked: false }
+    ];
+
+    let toastTimer = null;
+
+    function initApp() {
+      const totalCount = guardiansData.length;
+      const unlockedCount = guardiansData.filter((g) => g.unlocked).length;
+      document.getElementById("progressCount").textContent = `${unlockedCount}／${totalCount}`;
+
+      const segmentBar = document.getElementById("segmentBar");
+      segmentBar.innerHTML = "";
+      guardiansData.forEach((g) => {
+        const seg = document.createElement("span");
+        seg.className = g.unlocked ? "segment filled" : "segment";
+        segmentBar.appendChild(seg);
+      });
+
+      const grid = document.getElementById("guardianGrid");
+      grid.innerHTML = "";
+
+      guardiansData.forEach((item) => {
+        const noText = String(item.id).padStart(2, "0");
+        const card = document.createElement("article");
+
+        if (item.unlocked) {
+          card.className = "guardian-card unlocked";
+          card.innerHTML = `
+            <div class="card-top-meta">
+              <span class="card-no">${noText}</span>
+              <span class="card-island">${item.island}</span>
+            </div>
+            <div class="color-block" style="background-color: ${item.color};">
+              <span class="guardian-block-name">${item.name}</span>
+              <span class="guardian-block-sub">守護神已覺醒</span>
+            </div>
+            <div class="card-bottom-bar">
+              <span class="badge-unlocked">★ 已解鎖</span>
+              <span class="badge-view">查看卡片 ›</span>
+            </div>
+          `;
+          card.addEventListener("click", () => openCardModal(item));
+        } else {
+          card.className = "guardian-card locked";
+          card.innerHTML = `
+            <div class="card-top-meta">
+              <span class="card-no">${noText}</span>
+              <span class="card-island">未探索島嶼</span>
+            </div>
+            <div class="color-block">
+              <div class="silhouette-avatar">
+                <span class="question-mark">?</span>
+              </div>
+              <span class="unknown-label">UNKNOWN</span>
+            </div>
+            <div class="card-bottom-bar">
+              <span class="badge-locked">尚未解鎖</span>
+              <span class="badge-view">剪影</span>
+            </div>
+          `;
+          card.addEventListener("click", () => {
+            card.classList.remove("wobble");
+            void card.offsetWidth;
+            card.classList.add("wobble");
+            showToast(`🔒 完成「${item.island}」挑戰即可解鎖此守護神！`);
+          });
+        }
+
+        grid.appendChild(card);
+      });
+    }
+
+    function openCardModal(guardian) {
+      const noText = String(guardian.id).padStart(2, "0");
+      const detailBox = document.getElementById("detailCardBox");
+      detailBox.style.borderColor = guardian.color;
+
+      const modalBadge = document.getElementById("modalBadge");
+      modalBadge.textContent = noText;
+      modalBadge.style.backgroundColor = guardian.color;
+
+      document.getElementById("modalName").textContent = guardian.name;
+      document.getElementById("modalIndex").textContent = `${noText} / 12`;
+
+      const artBlock = document.getElementById("modalArtBlock");
+      artBlock.style.backgroundColor = guardian.color;
+      document.getElementById("modalArtName").textContent = guardian.name;
+      document.getElementById("modalArtIsland").textContent = guardian.island;
+
+      const themeEl = document.getElementById("modalTheme");
+      themeEl.textContent = guardian.theme;
+      themeEl.style.color = guardian.color;
+
+      document.getElementById("modalRarity").textContent = guardian.rarity;
+      document.getElementById("modalDesc").textContent = guardian.description;
+
+      detailBox.querySelector(".close-btn").style.backgroundColor = guardian.color;
+      document.getElementById("cardModal").classList.add("open");
+    }
+
+    function closeModal() {
+      document.getElementById("cardModal").classList.remove("open");
+    }
+
+    function closeModalOnBackdrop(event) {
+      if (event.target.id === "cardModal") closeModal();
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toastBox");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2300);
+    }
+  </script>
+</body>
+</html>
